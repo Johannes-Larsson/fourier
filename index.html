@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js"></script>
+    <script src="fourier.js"></script>
+    <style>
+        #canvas-container canvas body {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+  </head>
+  <body onload="setup()">
+        <div id='canvas-container'></div>
+        b_k: <input type='text' placeholder='b_k' id='bk'/>
+        <br>
+
+        terms: <input type='number' placeholder='number of terms' id='no_terms'/>
+        <br>
+
+        period: <input type='text' placeholder='period' id='period'/>
+        <br>
+
+        <!--<input type='text' placeholder='dt' id='dt'/>-->
+        trail speed: <input type='text' placeholder='trail speed' id='speed'/>
+        <br>
+
+        amplitude: <input type='number' placeholder='amplitude' id='amp'/>
+        <br>
+
+    <button onClick='setup()'>Refresh</button>
+  </body>
+</html>

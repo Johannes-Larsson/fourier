@@ -4,9 +4,11 @@ var t = 0;
 var A = 1;
 var points = [];
 var speed = 1;
+var nzterms = 0; // non-zero terms
 
 function setup() {
-    createCanvas(window.innerWidth, 300);
+    var canvas = createCanvas(window.innerWidth - 30, 300);
+    canvas.parent('canvas-container');
     terms = makeTerms();
     T = getInput("period");
     A = getInput("amp");
@@ -15,12 +17,29 @@ function setup() {
 
 /**
  * returns an array of amplitudes corresponding to the term with the same index
+ * should use the function written by the user
  */
 function makeTerms() {
+    nzterms = 0;
     var ret = [];
     for (var i = 0; i < getInput("no_terms"); i++) {
-       if (i % 2 == 0) ret.push(0);
-       else ret.push(A / i); 
+        if (i == 0) {
+            ret.push(2/PI);
+            continue;
+        }
+        if (i == 1) {
+            ret.push(0);
+            continue;
+        }
+       /*if (i % 2 == 0) ret.push(0);
+       else {
+            ret.push(4*A / (PI * i)); 
+            nzterms ++;
+        }*/
+        //ret.push(-2*A/(PI*i)*pow(-1,i));
+        ret.push(2*A/((1-i*i))*(pow(-1,i)+1));
+        /*if (i % 2 == 0) ret.push(0);
+        ret.push(4*A*(1 - pow(-1, i))/pow(PI*i,2));*/
     }
     return ret;
 }
@@ -56,6 +75,9 @@ function draw() {
     }
 
     //text(t, 0, height - 10);
+    //text(points.length + ' points', 0, height - 10);
+    text('y = ' + round(height / 2 - v.y), 0, height - 10);
+    text(nzterms + " non-zero terms", 100, height - 10);
 }
 
 /**
@@ -65,9 +87,10 @@ function draw() {
  * @param {*} v 
  */
 function drawTerm(a, k, v) {
+    var phase = -PI / 2;
    var vn = { 
-        x: v.x + a * cos(t * TAU * k / T),
-        y: v.y + a * sin(t * TAU * k / T)
+        x: v.x + a * cos(phase + t * TAU * k / T),
+        y: v.y + a * sin(phase + t * TAU * k / T)
     }; 
     stroke(0);
     line(v.x, v.y, vn.x, vn.y);
@@ -76,4 +99,8 @@ function drawTerm(a, k, v) {
 
 function getInput(id) {
     return document.getElementById(id).value;
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth - 30, windowHeight / 2);
 }

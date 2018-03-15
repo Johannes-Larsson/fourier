@@ -1,12 +1,16 @@
-float T = 200; // period
+float T = 20; // period
 float A = 100; // amplitude
-float speed = .3; // how much the graph moves each frame
+float speed = 1; // how much the graph moves each frame
 float dt = .1; // delta time each frame
 int fps = 60; // frames per second
-int terms = 200; // how many fourier terms to use
+int terms = 100; // how many fourier terms to use
 
 Term term(int n) { // should return the nth term
-  return new Term(n*2+1, A / (n*2+1)); // square wave
+  //return new Term(n*2+1, A / (n*2+1)); // square wave
+  float a  =(float)(A*Math.pow(-1,n)/(((n*n) - .25)*2*PI));
+  if (n == 0) a = -2*A / PI;
+  println(a);
+  return new Term(n, a);
 }
 
 
@@ -63,6 +67,7 @@ class Term {
   float a;
   float b;
   int k;
+  float phase = PI / 2;
   
   Term next;
   
@@ -72,8 +77,8 @@ class Term {
   }
   
   PVector draw(float t, float x, float y) {
-    float xn = x + a * cos(t*TAU*k/T);
-    float yn = y + a * sin(t*TAU*k/T);
+    float xn = x + a * cos(t*TAU*k/T + phase);
+    float yn = y + a * sin(t*TAU*k/T + phase);
     line(x, y, xn, yn);
     if (next != null) return next.draw(t, xn, yn);
     else return new PVector(xn, yn);
